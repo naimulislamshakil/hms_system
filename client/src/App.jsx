@@ -2,7 +2,7 @@ import './App.css';
 import { ColorModeContext, useMode } from './theme';
 import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
-import { LoginPage } from './Route';
+import { LoginPage, SingUpPage } from './Route';
 
 function App() {
 	const [theme, colorMode] = useMode();
@@ -16,6 +16,7 @@ function App() {
 				<div>
 					<Routes>
 						<Route path="/" element={<LoginPage />} />
+						<Route path="/singup" element={<SingUpPage />} />
 					</Routes>
 				</div>
 			</ThemeProvider>
