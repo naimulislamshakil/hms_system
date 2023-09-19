@@ -9,6 +9,18 @@ const cloudinary = require('cloudinary');
 const fileUploder = require('express-fileupload');
 require('dotenv').config();
 
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookiePerser());
+
+// add mongoose
+mongoose
+	.connect('mongodb://localhost:27017')
+	.then(() => console.log('Database is connected successfully'))
+	.catch((e) => console.log(e));
+
 app.get('/', (req, res) => {
 	res.send('<h1>How Are You?</h1>');
 });
