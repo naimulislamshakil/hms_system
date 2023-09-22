@@ -2,12 +2,16 @@ import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
+import { Provider } from 'react-redux';
 import './index.css';
+import store from './store/store.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-	<BrowserRouter>
-		<Suspense fallback="loading.....">
-			<App />
-		</Suspense>
-	</BrowserRouter>
+	<Provider store={store}>
+		<BrowserRouter>
+			<Suspense fallback="loading.....">
+				<App />
+			</Suspense>
+		</BrowserRouter>
+	</Provider>
 );
