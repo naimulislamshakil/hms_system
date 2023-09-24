@@ -15,12 +15,36 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { tokens } from '../../theme';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
+import { login, messageClear } from '../../store/Reducer/authReducer';
+import { PropagateLoader } from 'react-spinners';
 // import React from 'react';
 
 const index = () => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { error, message, token, loading, code, user } = useSelector(
+		(state) => state.auth
+	);
+
+	console.log({ error, message, token, loading, code, user });
+
+	if (code === 200) {
+		toast.success(message);
+		navigate('/dashboard');
+		messageClear();
+	}
+
+	if (code !== 200 && code !== null) {
+		toast.error(error ? error : message);
+		messageClear();
+	}
 
 	function Copyright(props) {
 		return (
@@ -40,8 +64,21 @@ const index = () => {
 		);
 	}
 
-	const handleSubmit = (e) => {
-		console.log(e);
+	const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+		useFormik({
+			initialValues,
+			validationSchema: userSchema,
+			onSubmit: async (values) => {
+				dispatch(login(values));
+			},
+		});
+
+	const overrideStyle = {
+		display: 'flex',
+		margin: '0 auto',
+		height: '24px',
+		justifyContent: 'center',
+		alignItems: 'center',
 	};
 
 	return (
@@ -71,6 +108,11 @@ const index = () => {
 						label="Email Address"
 						name="email"
 						autoComplete="email"
+						value={values.email}
+						onBlur={handleBlur}
+						onChange={handleChange}
+						error={!!touched.email && !!errors.email}
+						helperText={touched.email && errors.email}
 						autoFocus
 					/>
 					<TextField
@@ -82,6 +124,11 @@ const index = () => {
 						label="Password"
 						type="password"
 						id="password"
+						value={values.password}
+						onBlur={handleBlur}
+						onChange={handleChange}
+						error={!!touched.password && !!errors.password}
+						helperText={touched.password && errors.password}
 						autoComplete="current-password"
 					/>
 					<FormControlLabel
@@ -100,7 +147,11 @@ const index = () => {
 							background: colors.greenAccent[500],
 						}}
 					>
-						Sign In
+						{loading ? (
+							<PropagateLoader color="#fff" cssOverride={overrideStyle} />
+						) : (
+							'Sing In'
+						)}
 					</Button>
 					<Grid container>
 						<Grid item xs>
@@ -128,5 +179,21 @@ const index = () => {
 		</Container>
 	);
 };
+
+const initialValues = {
+	email: '',
+	password: '',
+};
+
+const regularExpression =
+	/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
+const userSchema = yup.object().shape({
+	email: yup.string().email('Invalid Email').required('Required'),
+	password: yup
+		.string()
+		.matches(regularExpression, 'Password Not Valid')
+		.required('Required'),
+});
 
 export default index;

@@ -2,7 +2,7 @@ import './App.css';
 import { ColorModeContext, useMode } from './theme';
 import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
-import { LoginPage, SingUpPage } from './Route';
+import { LoginPage, SingUpPage, DashboardPage } from './Route';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,6 +19,7 @@ function App() {
 					<Routes>
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/singup" element={<SingUpPage />} />
+						<Route path="/dashboard" element={<DashboardPage />} />
 					</Routes>
 					<ToastContainer
 						position="bottom-center"

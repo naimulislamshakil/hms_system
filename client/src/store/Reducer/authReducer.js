@@ -9,7 +9,20 @@ export const singup = createAsyncThunk(
 	async (info, { rejectWithValue, fulfillWithValue }) => {
 		try {
 			const { data } = await axios.post(`${baseUrl}/user/singup`, info);
-			console.log(data);
+
+			return fulfillWithValue(data);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
+export const login = createAsyncThunk(
+	'auth/login',
+	async (info, { rejectWithValue, fulfillWithValue }) => {
+		try {
+			const { data } = await axios.post(`${baseUrl}/user/login`, info);
+			localStorage.setItem('accessToken', data.token);
 			return fulfillWithValue(data);
 		} catch (error) {
 			return rejectWithValue(error);
@@ -30,8 +43,8 @@ const authReducer = createSlice({
 	reducers: {
 		messageClear: (state, _) => {
 			state.error = null;
-            state.message = '';
-            state.code=null
+			state.message = '';
+			state.code = null;
 		},
 	},
 	extraReducers: {
@@ -49,6 +62,26 @@ const authReducer = createSlice({
 			state.loading = false;
 			state.message = '';
 			state.code = payload.status;
+		},
+
+		[login.pending]: (state) => {
+			state.loading = true;
+		},
+		[login.fulfilled]: (state, { payload }) => {
+			state.error = null;
+			state.loading = false;
+			state.message = payload.message;
+			state.code = payload.status;
+			state.token = payload.token;
+			state.user = payload.user;
+		},
+		[login.rejected]: (state, { payload }) => {
+			state.error = payload.error;
+			state.loading = false;
+			state.message = payload.message;
+			state.code = payload.status;
+			state.user = {};
+			state.token = '';
 		},
 	},
 });
