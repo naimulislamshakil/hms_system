@@ -9,7 +9,7 @@ export const singup = createAsyncThunk(
 	async (info, { rejectWithValue, fulfillWithValue }) => {
 		try {
 			const { data } = await axios.post(`${baseUrl}/user/singup`, info);
-
+			console.log(data);
 			return fulfillWithValue(data);
 		} catch (error) {
 			return rejectWithValue(error);
@@ -25,12 +25,13 @@ const authReducer = createSlice({
 		loading: false,
 		message: '',
 		token: '',
-		code: 0,
+		code: null,
 	},
 	reducers: {
 		messageClear: (state, _) => {
-			state.error = '';
-			state.message = '';
+			state.error = null;
+            state.message = '';
+            state.code=null
 		},
 	},
 	extraReducers: {

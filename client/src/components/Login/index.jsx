@@ -9,13 +9,13 @@ import {
 	CssBaseline,
 	FormControlLabel,
 	Grid,
-	Link,
 	TextField,
 	Typography,
 	useTheme,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { tokens } from '../../theme';
+import { Link } from 'react-router-dom';
 // import React from 'react';
 
 const index = () => {
@@ -105,7 +105,7 @@ const index = () => {
 					<Grid container>
 						<Grid item xs>
 							<Link
-								href="#"
+								to={'/'}
 								variant="body2"
 								style={{ color: colors.grey[100] }}
 							>
@@ -114,7 +114,7 @@ const index = () => {
 						</Grid>
 						<Grid item>
 							<Link
-								href="#"
+								to={'/singup'}
 								variant="body2"
 								style={{ color: colors.grey[100] }}
 							>

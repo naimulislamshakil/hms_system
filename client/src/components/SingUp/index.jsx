@@ -13,13 +13,35 @@ import {
 	Typography,
 	useTheme,
 } from '@mui/material';
-import React from 'react';
+import * as yup from 'yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useFormik } from 'formik';
 import { tokens } from '../../theme';
+import { useDispatch, useSelector } from 'react-redux';
+import { messageClear, singup } from '../../store/Reducer/authReducer';
+import { toast } from 'react-toastify';
+import { PropagateLoader } from 'react-spinners';
+import { useNavigate } from 'react-router-dom';
 
 const index = () => {
 	const theme = useTheme();
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { error, message, code, loading } = useSelector((state) => state.auth);
 	const colors = tokens(theme.palette.mode);
+
+	console.log({ error, message, code, loading });
+
+	if (code === 200) {
+		toast.success(message);
+		navigate('/');
+		messageClear();
+	}
+
+	if (code !== 200 && code !== null) {
+		toast.error(error ? error : message);
+		messageClear();
+	}
 
 	function Copyright(props) {
 		return (
@@ -39,8 +61,21 @@ const index = () => {
 		);
 	}
 
-	const handleSubmit = (e) => {
-		console.log(e);
+	const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+		useFormik({
+			initialValues,
+			validationSchema: userSchema,
+			onSubmit: async (values) => {
+				dispatch(singup(values));
+			},
+		});
+
+	const overrideStyle = {
+		display: 'flex',
+		margin: '0 auto',
+		height: '24px',
+		justifyContent: 'center',
+		alignItems: 'center',
 	};
 
 	return (
@@ -60,17 +95,22 @@ const index = () => {
 				<Typography component="h1" variant="h5">
 					Sign up
 				</Typography>
-				<Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+				<Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
 					<Grid container spacing={2}>
 						<Grid item xs={12} sm={6}>
 							<TextField
 								color="secondary"
 								autoComplete="given-name"
 								name="firstName"
+								value={values.firstName}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								error={!!touched.firstName && !!errors.firstName}
+								helperText={touched.firstName && errors.firstName}
 								required
 								fullWidth
-								id="firstName"
-								label="First Name"
+								id="firstNameName"
+								label="firstName Name"
 								autoFocus
 							/>
 						</Grid>
@@ -79,9 +119,14 @@ const index = () => {
 								color="secondary"
 								required
 								fullWidth
-								id="lastName"
-								label="Last Name"
+								id="lastNameName"
+								label="lastName Name"
 								name="lastName"
+								value={values.lastName}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								error={!!touched.lastName && !!errors.lastName}
+								helperText={touched.lastName && errors.lastName}
 								autoComplete="family-name"
 							/>
 						</Grid>
@@ -93,6 +138,11 @@ const index = () => {
 								id="email"
 								label="Email Address"
 								name="email"
+								value={values.email}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								error={!!touched.email && !!errors.email}
+								helperText={touched.email && errors.email}
 								autoComplete="email"
 							/>
 						</Grid>
@@ -102,6 +152,11 @@ const index = () => {
 								required
 								fullWidth
 								name="password"
+								value={values.password}
+								onBlur={handleBlur}
+								onChange={handleChange}
+								error={!!touched.password && !!errors.password}
+								helperText={touched.password && errors.password}
 								label="Password"
 								type="password"
 								id="password"
@@ -131,7 +186,11 @@ const index = () => {
 							background: colors.greenAccent[500],
 						}}
 					>
-						Sign Up
+						{loading ? (
+							<PropagateLoader color="#fff" cssOverride={overrideStyle} />
+						) : (
+							'Sing Up'
+						)}
 					</Button>
 					<Grid container justifyContent="flex-end">
 						<Grid item>
@@ -146,5 +205,25 @@ const index = () => {
 		</Container>
 	);
 };
+
+const initialValues = {
+	email: '',
+	password: '',
+	firstName: '',
+	lastName: '',
+};
+
+const regularExpression =
+	/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
+const userSchema = yup.object().shape({
+	email: yup.string().email('Invalid Email').required('Required'),
+	password: yup
+		.string()
+		.matches(regularExpression, 'Password Not Valid')
+		.required('Required'),
+	firstName: yup.string().required(),
+	lastName: yup.string().required(),
+});
 
 export default index;

@@ -3,6 +3,8 @@ import { ColorModeContext, useMode } from './theme';
 import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
 import { Route, Routes } from 'react-router-dom';
 import { LoginPage, SingUpPage } from './Route';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 	const [theme, colorMode] = useMode();
@@ -18,6 +20,17 @@ function App() {
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/singup" element={<SingUpPage />} />
 					</Routes>
+					<ToastContainer
+						position="bottom-center"
+						autoClose={6000}
+						newestOnTop={false}
+						closeOnClick
+						rtl={false}
+						pauseOnFocusLoss
+						draggable
+						pauseOnHover
+						theme={themes.palette.mode === 'dark' ? 'dark' : 'light'}
+					/>
 				</div>
 			</ThemeProvider>
 		</ColorModeContext.Provider>
