@@ -29,21 +29,24 @@ const index = () => {
 	const colors = tokens(theme.palette.mode);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { error, message, token, loading, code, user } = useSelector(
+	const { error, message, token, loading, code } = useSelector(
 		(state) => state.auth
 	);
 
-	console.log({ error, message, token, loading, code, user });
+	console.log({ error, message, token, loading, code });
 
-	if (code === 200) {
-		toast.success(message);
+	const accessToken = localStorage.getItem('accessToken');
+	const user = JSON.parse(localStorage.getItem('user'));
+
+	if (code === 200 || (accessToken && user)) {
+		toast.success(message ? message : '');
+		dispatch(messageClear());
 		navigate('/dashboard');
-		messageClear();
 	}
 
 	if (code !== 200 && code !== null) {
 		toast.error(error ? error : message);
-		messageClear();
+		dispatch(messageClear());
 	}
 
 	function Copyright(props) {

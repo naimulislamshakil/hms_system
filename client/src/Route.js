@@ -2,6 +2,7 @@ import { lazy } from 'react';
 
 const LoginPage = lazy(() => import('./pages/LoginPage/index.jsx'));
 const SingUpPage = lazy(() => import('./pages/SingUpPage/index.jsx'));
-const DashboardPage=lazy(()=>import("./pages/Dashboard/index.jsx"))
+const DashboardPage = lazy(() => import('./pages/DashboardPage/index.jsx'));
+const Dashboard = lazy(() => import('./components/Dashboard/index.jsx'));
 
-export { LoginPage, SingUpPage, DashboardPage };
+export { LoginPage, SingUpPage, DashboardPage, Dashboard };

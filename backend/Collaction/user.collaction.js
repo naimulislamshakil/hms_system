@@ -45,8 +45,26 @@ exports.loginUserCollaction = async (req, res, next) => {
 			success: true,
 			status: 200,
 			message: 'Login Successfully...',
-			user,
+
 			token,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+exports.userPersistCollaction = async (req, res, next) => {
+	try {
+		const { id } = req.user;
+
+		const user = await Service.persistService(id);
+
+		const { password, ...other } = user.toObject();
+
+		res.status(200).json({
+			success: true,
+			status: 200,
+			user: other,
 		});
 	} catch (error) {
 		next(error);

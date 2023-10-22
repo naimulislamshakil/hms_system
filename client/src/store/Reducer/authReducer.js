@@ -30,6 +30,27 @@ export const login = createAsyncThunk(
 	}
 );
 
+export const persist = createAsyncThunk(
+	'auth/persist',
+	async (token=1, { rejectWithValue, fulfillWithValue }) => {
+		try {
+			const { data } = await axios.get(`${baseUrl}/user/persist`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Basic ${token}`,
+				},
+			});
+
+			
+
+			return fulfillWithValue(data);
+		} catch (error) {
+			return rejectWithValue(error);
+		}
+	}
+);
+
 const authReducer = createSlice({
 	name: 'slice',
 	initialState: {
@@ -73,15 +94,33 @@ const authReducer = createSlice({
 			state.message = payload.message;
 			state.code = payload.status;
 			state.token = payload.token;
-			state.user = payload.user;
 		},
 		[login.rejected]: (state, { payload }) => {
 			state.error = payload.error;
 			state.loading = false;
 			state.message = payload.message;
 			state.code = payload.status;
-			state.user = {};
+
 			state.token = '';
+		},
+
+		[persist.pending]: (state) => {
+			state.loading = true;
+		},
+
+		[persist.fulfilled]: (state, { payload }) => {
+			state.error = null;
+			state.loading = false;
+			state.code = payload.status;
+			state.user = payload.user;
+		},
+
+		[persist.rejected]: (state, { payload }) => {
+			state.error = payload.error;
+			state.loading = false;
+			state.message = payload.message;
+			state.code = payload.status;
+			state.user = {};
 		},
 	},
 });

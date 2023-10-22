@@ -9,3 +9,8 @@ exports.loginUserService = async (email) => {
 	const result = await USER.findOne({ email });
 	return result;
 };
+
+exports.persistService = async (id) => {
+	const result = USER.findOne({ _id: id });
+	return result;
+};
