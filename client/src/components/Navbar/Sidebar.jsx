@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
@@ -64,7 +64,7 @@ const Sidebar = () => {
 				},
 			}}
 		>
-			<Box>
+			<Box className="sidebar">
 				<ProSidebar collapsed={isCollapsed}>
 					<Menu iconShape="square">
 						{/* LOGO AND MENU ICON */}
@@ -83,8 +83,12 @@ const Sidebar = () => {
 									alignItems="center"
 									ml="15px"
 								>
-									<Typography variant="h3" color={colors.grey[100]}>
-										ADMINIS
+									<Typography
+										variant="h3"
+										color={colors.grey[100]}
+										style={{ textTransform: 'uppercase' }}
+									>
+										{user.role}
 									</Typography>
 									<IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
 										<MenuOutlinedIcon />

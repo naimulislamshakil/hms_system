@@ -2,7 +2,12 @@ import './App.css';
 import { ColorModeContext, useMode } from './theme';
 import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { LoginPage, SingUpPage, DashboardPage, Dashboard } from './Route';
+import {
+	LoginPage,
+	SingUpPage,
+	DashboardPage,
+	DashboardContent,
+} from './Route';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +51,9 @@ function App() {
 					<Routes>
 						<Route path="/" element={<LoginPage />} />
 						<Route path="/singup" element={<SingUpPage />} />
-						<Route index path="/dashboard" element={<DashboardPage />}></Route>
+						<Route path="/dashboard" element={<DashboardPage />}>
+							<Route index element={<DashboardContent />} />
+						</Route>
 					</Routes>
 					<ToastContainer
 						position="bottom-center"
