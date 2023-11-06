@@ -6,6 +6,10 @@ import Card from './Card';
 import out from '../../assets/medical-checkup.png';
 import inp from '../../assets/cancer.png';
 import employees from '../../assets/division.png';
+import vendors from '../../assets/seller.png';
+import assets from '../../assets/pharmaceutical cup.png';
+import pharmaceutical from '../../assets/pharmaceutical.png';
+import EmployeesTable from './EmployeesTable';
 
 const index = () => {
 	const user = JSON.parse(localStorage.getItem('user'));
@@ -27,19 +31,19 @@ const index = () => {
 			count: 3,
 		},
 		{
-			icon: out,
-			text: 'Out Patients',
+			icon: vendors,
+			text: 'Vendors',
 			count: 1,
 		},
 		{
-			icon: out,
-			text: 'Out Patients',
-			count: 1,
+			icon: assets,
+			text: 'Corporation Assets',
+			count: 2,
 		},
 		{
-			icon: out,
-			text: 'Out Patients',
-			count: 1,
+			icon: pharmaceutical,
+			text: 'Pharmaceuticals',
+			count: 3,
 		},
 	];
 	return (
@@ -58,6 +62,8 @@ const index = () => {
 					))}
 				</Grid>
 			</Box>
+
+			<EmployeesTable />
 		</Box>
 	);
 };

@@ -7,6 +7,7 @@ import {
 	SingUpPage,
 	DashboardPage,
 	DashboardContent,
+	RegisterPatient,
 } from './Route';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -53,6 +54,10 @@ function App() {
 						<Route path="/singup" element={<SingUpPage />} />
 						<Route path="/dashboard" element={<DashboardPage />}>
 							<Route index element={<DashboardContent />} />
+							<Route
+								path="patient/register_patients"
+								element={<RegisterPatient />}
+							/>
 						</Route>
 					</Routes>
 					<ToastContainer

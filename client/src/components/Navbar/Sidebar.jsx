@@ -8,6 +8,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { tokens } from '../../theme';
 import Topbar from './Topbar';
 import SpeedOutlinedIcon from '@mui/icons-material/SpeedOutlined';
+import AccessibleOutlinedIcon from '@mui/icons-material/AccessibleOutlined';
 
 const Item = ({ title, to, selected, icon, setSelected }) => {
 	const theme = useTheme();
@@ -41,6 +42,12 @@ const Sidebar = () => {
 			title: 'Dashboard',
 			icon: <SpeedOutlinedIcon />,
 			path: '/dashboard',
+		},
+		{
+			id: 2,
+			title: 'Patients',
+			icon: <AccessibleOutlinedIcon />,
+			path: '/dashboard/patient/register_patients',
 		},
 	];
 	return (

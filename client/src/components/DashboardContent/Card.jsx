@@ -5,10 +5,10 @@ import { tokens } from '../../theme';
 const Card = ({ info }) => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
-	console.log(info);
+	
 
 	return (
-		<Box bgcolor={colors.primary[400]}>
+		<Box bgcolor={colors.primary[400]} borderRadius={2}>
 			<Grid container spacing={1} textAlign="end" alignItems="center">
 				<Grid item xs={6}>
 					<img
