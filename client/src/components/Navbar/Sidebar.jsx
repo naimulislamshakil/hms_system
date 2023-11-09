@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import { useState } from 'react';
-import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
+import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import { Link, Outlet } from 'react-router-dom';
@@ -18,9 +18,10 @@ const Item = ({ title, to, selected, icon, setSelected }) => {
 			active={selected === title}
 			style={{
 				color: colors.grey[100],
+				backgroundColor: colors.primary[400],
 			}}
 			onClick={() => setSelected(title)}
-			icon={icon}
+			icon={icon ? icon : ''}
 		>
 			<Typography>{title}</Typography>
 			<Link to={to} />
@@ -32,6 +33,7 @@ const Sidebar = () => {
 	const theme = useTheme();
 	const colors = tokens(theme.palette.mode);
 	const [isCollapsed, setIsCollapsed] = useState(false);
+	// const [is]
 	const [selected, SetSelected] = useState('Dashboard');
 
 	const user = JSON.parse(localStorage.getItem('user'));
@@ -43,11 +45,33 @@ const Sidebar = () => {
 			icon: <SpeedOutlinedIcon />,
 			path: '/dashboard',
 		},
+	];
+
+	const patients = [
+		{
+			id: 1,
+			title: 'Register Patients',
+			path: '/dashboard/patient/register_patients',
+		},
 		{
 			id: 2,
-			title: 'Patients',
-			icon: <AccessibleOutlinedIcon />,
-			path: '/dashboard/patient/register_patients',
+			title: 'View Patients',
+			path: '/dashboard/patient/view_patients',
+		},
+		{
+			id: 3,
+			title: 'Manage Patients',
+			path: '/dashboard/patient/manage_patients',
+		},
+		{
+			id: 4,
+			title: 'Discharge Patients',
+			path: '/dashboard/patient/discharge_patients',
+		},
+		{
+			id: 5,
+			title: 'Patient Transfer',
+			path: '/dashboard/patient/patient_transfer',
 		},
 	];
 	return (
@@ -59,6 +83,9 @@ const Sidebar = () => {
 				},
 				'& .pro-icon-wrapper': {
 					backgroundColor: 'transparent !important',
+				},
+				'& .pro-sub-menu >.pro-inner-list-item': {
+					background: `${colors.primary[400]} !important`,
 				},
 				'& .pro-inner-item': {
 					padding: '5px 35px 5px 20px !important',
@@ -115,6 +142,25 @@ const Sidebar = () => {
 									setSelected={SetSelected}
 								/>
 							))}
+
+						<SubMenu
+							icon={<AccessibleOutlinedIcon />}
+							title="Patients"
+							style={{
+								color: colors.grey[100],
+								backgroundColor: colors.primary[400],
+							}}
+						>
+							{patients.map((patient, i) => (
+								<Item
+									key={i}
+									title={patient.title}
+									to={patient.path}
+									selected={selected}
+									setSelected={SetSelected}
+								/>
+							))}
+						</SubMenu>
 					</Menu>
 				</ProSidebar>
 			</Box>
